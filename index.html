@@ -98,7 +98,7 @@
 
   	<script type="text/javascript">
   	function getWard(location){
-  		$.get("https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ('+location.latitude+' '+location.longitude+')')", function(data, status){
+  		jquery.get("https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ('+location.latitude+' '+location.longitude+')')", function(data, status){
   			console.log(status);
   		});
   	}
