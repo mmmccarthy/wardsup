@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ward Superintendant</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400|Roboto:400,300' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    	/* Font Styles */
+    	/* Headings */
+    	h1, h1.page-header, h2, h3, h4, h5, ul.nav > li, a.btn, button, th, label {
+			font-family: 'Montserrat', 'Helvetica', 'Arial', sans-serif;
+		}
+		h1, h2, h3, h4, h5 {
+			text-transform: none;
+		}
+		
+		/* Body Text */
+		p, p.lead, li, span, td, input, select, option, textarea, div.alert, a, .tooltip-inner, div.dataTables_info {
+			/* font-family: 'Avenir'; */
+			/* font-family: 'Noto Sans', Georgia, serif; */
+			font-family: 'Roboto', Georgia, serif;
+		}
+		
+		/* Header */
+		.portal-header{
+			margin-top: 0.75em;
+			/* margin-bottom: 1em; */
+		}
+		
+		.portal-img{
+			float: left;
+			padding-right: 1em;
+		}
+		
+		div.portal-header-row{
+			margin-bottom: 15px;
+		}
+	
+		.numun-logo-word {
+			font-family: 'Raleway', 'Helvetica', 'Arial', sans-serif;
+			font-weight: 400;
+		}
+    </style>
+  </head>
+
+  <body>
+	<div class="container-fluid portal-header">
+		<div class="row portal-header-row">
+		  <div class="col-sm-6">
+			  <!--<img class="portal-img" src="#" height="95" />-->
+			  <h2 class="portal-header"><i class="fas fa-wrench fa-lg text-info"></i> Ward Superintendant</h2>
+		  </div>
+		  <div class="col-sm-6">
+		  </div>
+		</div>
+	</div>
+  	<div class="container">
+  		<div class="row">
+  			<div class="col-sm-12">
+  				<h3>1. Location</h3>
+  				<p class="lead">
+  					Where are you?
+  				</p>
+  			</div>
+  		</div>
+  	</div>
+
+  	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  	<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+  	<script type="text/javascript">
+  	var options = {
+	  enableHighAccuracy: true,
+	  timeout: 5000,
+	  maximumAge: 0
+	};
+
+	function success(pos) {
+	  var crd = pos.coords;
+
+	  console.log('Your current position is:');
+	  console.log(`Latitude : ${crd.latitude}`);
+	  console.log(`Longitude: ${crd.longitude}`);
+	  console.log(`More or less ${crd.accuracy} meters.`);
+	  console.log(getWard(crd));
+	};
+
+	function error(err) {
+	  console.warn(`ERROR(${err.code}): ${err.message}`);
+	};
+
+	navigator.geolocation.getCurrentPosition(success, error, options);
+  	</script>
+
+
+  	<script type="text/javascript">
+  	function getWard(location){
+  		$.get("https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ('+location.latitude+' '+location.longitude+')')", function(data, status){
+  			console.log(status);
+  		});
+  	}
+  	</script>
+  </body>
+</html>
