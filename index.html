@@ -100,9 +100,13 @@
   	function getWard(location){
 
   		$.ajax({
-         url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ("+location.latitude+" "+location.longitude+")')",
-
-         type: "GET",
+         url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json",
+         method: "GET",
+		 dataType: "json",
+		 data: {
+		   "$where": "intersects(the_geom, 'POINT ("+location.latitude+" "+location.longitude+")')"
+		   //"$$app_token": app_token
+		 },
          beforeSend: function(xhr){
          	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
          	xhr.setRequestHeader('X-SODA2-Fields', '["ward"]');
