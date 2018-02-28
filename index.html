@@ -66,7 +66,7 @@
   		</div>
   	</div>
 
-  	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   	<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
@@ -74,7 +74,7 @@
   	<script type="text/javascript">
   	var options = {
 	  enableHighAccuracy: true,
-	  timeout: 5000,
+	  timeout: 10000,
 	  maximumAge: 0
 	};
 
@@ -98,9 +98,18 @@
 
   	<script type="text/javascript">
   	function getWard(location){
-  		jquery.get("https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ('+location.latitude+' '+location.longitude+')')", function(data, status){
-  			console.log(status);
-  		});
+
+  		$.ajax({
+         url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json?$where=intersects(the_geom, 'POINT ("+location.latitude+" "+location.longitude+")')",
+
+         type: "GET",
+         beforeSend: function(xhr){
+         	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+         	xhr.setRequestHeader('X-SODA2-Fields', '["ward"]');
+
+         },
+         success: function(data) { console.log('Ward: '+data); }
+      });
   	}
   	</script>
   </body>
