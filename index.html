@@ -136,8 +136,8 @@
 
   		$.ajax({
          url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json",
-         jsonp: "$jsonp",
-  		 dataType: "jsonp",
+         method: "GET",
+  		 dataType: "json",
 		 data: {
 		   "$select": "*",
 		   "$where": "intersects(the_geom, 'POINT ("+location.longitude+" "+location.latitude+")')"
@@ -156,7 +156,10 @@
 
       	$('.loc-results').removeClass('d-none');
       }).fail(function(error){
-      	console.log('Ward lookup failed.');
+      	console.log('Ward lookup failed: '+error[0]);
+
+      	$('#ward-name').text('Unknown');
+      	$('.loc-results').removeClass('d-none');
       });
   	}
   	</script>
