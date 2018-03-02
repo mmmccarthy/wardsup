@@ -44,24 +44,50 @@
     </style>
   </head>
 
-  <body>
-	<div class="container-fluid portal-header">
-		<div class="row portal-header-row">
-		  <div class="col-sm-6">
+  <body class="bg-light">
+
+	<div class="container">
+		<div class="row">
+		  <div class="col text-center">
 			  <!--<img class="portal-img" src="#" height="95" />-->
-			  <h2 class="portal-header"><i class="fas fa-wrench fa-lg text-info"></i> Ward Superintendant</h2>
-		  </div>
-		  <div class="col-sm-6">
+			  <h1><i class="fas fa-wrench fa-lg text-info"></i></h1>
+			  <h1>Ward Superintendant</h1>
+			  <hr />
 		  </div>
 		</div>
 	</div>
   	<div class="container">
   		<div class="row">
   			<div class="col-sm-12">
-  				<h3>1. Location</h3>
-  				<p class="lead">
-  					Where are you?
-  				</p>
+  				<div class="loc-unknown">
+  					<h4 class="text-muted">Determining location...</h4>
+  				</div>
+  				<div class="alert alert-warning loc-disabled d-none">
+  					<h4>This page needs access to your location to determine your ward.</h4>
+  				</div>
+
+  				<div class="row loc-results d-none">
+
+  					<div class="col">
+	  					<h3 class="text-info" id="ward-name-label"><i class="fa fa-map-marker-alt"></i> Your Ward</h3>
+	  					<h1 id="ward-name"></h1>
+	  				</div>
+
+
+  					<div class="col">
+	  					<h3 class="text-info" id="ward-ald-label"><i class="fa fa-user"></i> Your Alderman</h3>
+	  					<h1 id="ward-ald"></h1>
+	  				</div>
+
+
+  					<div class="col">
+	  					<h3 class="text-info" id="ward-contact-label"><i class="fa fa-phone"></i> Office Contact</h3>
+	  					<h1 id="ward-contact"></h1>
+	  				</div>
+
+  					
+  					<h2 id="ward-contact"></h2>
+  				</div>
   			</div>
   		</div>
   	</div>
@@ -84,11 +110,15 @@
 	  console.log('Your current position is:');
 	  console.log(`Latitude : ${crd.latitude}`);
 	  console.log(`Longitude: ${crd.longitude}`);
-	  console.log(`More or less ${crd.accuracy} meters.`);
-	  console.log(getWard(crd));
+	  //console.log(`More or less ${crd.accuracy} meters.`);
+
+	  $('.loc-unknown').addClass('d-none');
+	  getWard(crd); //Trigger ward lookup
 	};
 
 	function error(err) {
+	  $('.loc-disabled').removeClass('d-none');
+	  $('.loc-unknown').addClass('d-none');
 	  console.warn(`ERROR(${err.code}): ${err.message}`);
 	};
 
@@ -97,22 +127,36 @@
 
 
   	<script type="text/javascript">
+  	var contacts = [
+  		{"ward":"1", "contact":"ward01@cityofchicago.org"},
+  		{"ward":"47", "alderman":"Ameya Pawar", "contact": {"email":"ward47@cityofchicago.org", "phone":"(773) 868-4747", "website": "http://chicago47.org"} }
+  	];
+
   	function getWard(location){
 
   		$.ajax({
          url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json",
-         method: "GET",
-		 dataType: "json",
+         jsonp: "$jsonp",
+  		 dataType: "jsonp",
 		 data: {
-		   "$where": "intersects(the_geom, 'POINT ("+location.latitude+" "+location.longitude+")')"
-		   //"$$app_token": app_token
-		 },
-         beforeSend: function(xhr){
-         	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-         	xhr.setRequestHeader('X-SODA2-Fields', '["ward"]');
+		   "$select": "*",
+		   "$where": "intersects(the_geom, 'POINT ("+location.longitude+" "+location.latitude+")')"
+		 }
+		 /*  //"$$app_token": app_token
+		 //,
+         //beforeSend: function(xhr){
+         	//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+         	//xhr.setRequestHeader('X-SODA2-Fields', '["ward"]');
+         //} */
+      }).done(function(data){
+      	console.log(data[0]);
 
-         },
-         success: function(data) { console.log('Ward: '+data); }
+      	$('#ward-name').text('Ward '+data[0].ward);
+      	$('#ward-contact').text('');
+
+      	$('.loc-results').removeClass('d-none');
+      }).fail(function(error){
+      	console.log('Ward lookup failed.');
       });
   	}
   	</script>
