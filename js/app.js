@@ -5,8 +5,8 @@ var urls = {
 	wardInfo: "https://data.cityofchicago.org/resource/7ia9-ayc2.json", 
 	elemSchools: "https://data.cityofchicago.org/resource/n45m-yz4n.json", 
 	highSchools: "https://data.cityofchicago.org/resource/juf9-y87b.json", 
-	sweepSections: "", 
-	sweepSchedule: "",
+	sweepSections: "https://data.cityofchicago.org/resource/eiv4-4c3n.json", 
+	sweepSchedule: "https://data.cityofchicago.org/resource/dkvj-fe84.json",
 	cpsLink: "https://schoolinfo.cps.edu/schoolprofile/SchoolDetails.aspx?SchoolId="
 };
 
@@ -33,6 +33,7 @@ function getLocation(){
 
 	  getWard(geoloc);
 	  getSchools(geoloc);
+	  getSweepSection(geoloc);
 	};
 
 	function error(err) {
@@ -193,6 +194,67 @@ function showHighSchools(elem){
 		console.log(elem);
 	}
 }
+
+function getSweepSection(geoloc) {
+	console.log('Getting Sweep Section...');
+	$.ajax({
+         url: urls.sweepSections+appToken,
+         method: "GET",
+  		   dataType: "json",
+    		 data: {
+    		   "$select": "*",
+    		   "$where": "intersects(the_geom, 'POINT ("+geoloc.longitude+" "+geoloc.latitude+")')",
+    		 }
+      }).done(function(data){
+      	if(data[0].code != null){
+      		getSweepSchedule(data[0].code);
+      	}else{
+      		console.log(`Sweep section error ${data}`);
+      	}
+      });
+}
+
+function getSweepSchedule(code){
+	console.log('Getting Sweep Schedule...');
+	$.ajax({
+         url: urls.sweepSchedule+appToken,
+         method: "GET",
+  		   dataType: "json",
+    		 data: {
+    		   "$select": "*",
+    		   "ward_section_concatenated": code,
+    		 }
+      }).done(function(data){
+      	if(data != null){
+      		showSweepSchedule(data);
+      	}else{
+      		console.log(`Sweep schedule error ${data}`);
+      	}
+      });
+}
+
+function showSweepSchedule(data){
+if(data != null){
+		console.log(data);
+		$.each(data, function(i, item){
+			//data[i].datesplit = data[i].dates.split(',');
+			$('#sweep-schedule').append(`
+				<div class="col">
+				<h4 class="school-name">
+					${data[i].month_name}
+				</h4>
+				<p class="lead month-cal" data-sweep-month="${data[i].month_number}">
+					${data[i].dates}
+				</p>
+				</div>`);
+		});
+		//console.log(data);
+		$('.sanitation-results').removeClass('d-none');
+	}else{
+		console.log(elem);
+	}
+}
+
 
 
 window.onload = getLocation();

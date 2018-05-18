@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
     <style type="text/css">
+    	/* Page Setup */
+    	.top-buffer { margin-top: 4em; }
+
     	/* Font Styles */
     	/* Headings */
     	h1, h1.page-header, h2, h3, h4, h5, ul.nav > li, a.btn, button, th, label {
@@ -54,7 +57,7 @@
   <body class="bg-light">
 
 	<div class="container">
-		<div class="row">
+		<div class="row top-buffer">
 		  <div class="col text-center">
 			  <!--<img class="portal-img" src="#" height="95" />-->
 			  <h1><i class="fas fa-wrench fa-lg text-info"></i></h1>
@@ -98,7 +101,7 @@
 				</div>
   			</div>
 
-  			<div class="row transit-results d-none">
+  			<div class="row transit-results d-none top-buffer">
 				<div class="col">
 					<h2>Your Transit (CTA)</h2>
 				</div>
@@ -107,18 +110,23 @@
 				</div>
 			</div>
 
-  			<div class="row sanitation-results d-none">
+  			<div class="row sanitation-results d-none top-buffer">
 				<div class="col">
 					<h3 class="text-info"><i class="fas fa-school"></i> Your Garbage/Recycling Pickup</h3>
+					<p class="lead help-text">Garbage (black cart) is collected once a week. Recycling (blue cart) is collected once every 2 weeks.</p>
+
 					<a href="https://www.recyclebycity.com/chicago/schedule" class="btn btn-outline-info" target="_blank">Get your Schedule</a>
 				</div>
 
 				<div class="col">
 					<h3 class="text-info"><i class="fas fa-school"></i> Your Street Sweeping Schedule</h3>
+					<p class="lead help-text">Orange "No Parking" signs will be posted one day before scheduled sweeping and are removed after sweeping is completed.</p>
+
+					<div class="row" id="sweep-schedule"></div>
 				</div>
 			</div>
 
-			<div class="row school-results d-none">
+			<div class="row school-results d-none top-buffer">
 				<div class="col-6">
 					<h3 class="text-info"><i class="fas fa-school"></i> Your Elementary Schools</h3>
 					<div class="row" id="elem-schools"></div>
