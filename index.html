@@ -5,6 +5,8 @@
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400|Roboto:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
     <style type="text/css">
     	/* Font Styles */
     	/* Headings */
@@ -57,111 +59,75 @@
 		</div>
 	</div>
   	<div class="container">
-  		<div class="row">
-  			<div class="col-sm-12">
-  				<div class="loc-unknown">
-  					<h4 class="text-muted">Determining location...</h4>
-  				</div>
-  				<div class="alert alert-warning loc-disabled d-none">
-  					<h4>This page needs access to your location to determine your ward.</h4>
-  				</div>
-
-  				<div class="row loc-results d-none">
-
-  					<div class="col">
-	  					<h3 class="text-info" id="ward-name-label"><i class="fa fa-map-marker-alt"></i> Your Ward</h3>
-	  					<h1 id="ward-name"></h1>
-	  				</div>
-
-
-  					<div class="col">
-	  					<h3 class="text-info" id="ward-ald-label"><i class="fa fa-user"></i> Your Alderman</h3>
-	  					<h1 id="ward-ald"></h1>
-	  				</div>
-
-
-  					<div class="col">
-	  					<h3 class="text-info" id="ward-contact-label"><i class="fa fa-phone"></i> Office Contact</h3>
-	  					<h1 id="ward-contact"></h1>
-	  				</div>
-
-  					
-  					<h2 id="ward-contact"></h2>
-  				</div>
+  			<div class="row loc-unknown">
+  				<h4 class="text-muted">Determining location...</h4>
   			</div>
+
+			<div class="row alert alert-warning loc-disabled d-none">
+				<h4>This page needs access to your location to determine your ward.</h4>
+			</div>
+
+  			<div class="row loc-results d-none">
+				<div class="col">
+					<h3 class="text-info" id="ward-name-label"><i class="fas fa-map-marker-alt"></i> Your Ward</h3>
+					<h3 id="ward-num">Ward </h3>
+					<h3 id="ward-ald">Alderman </h3>
+				</div>
+
+
+				<div class="col">
+					<h3 class="text-info" id="ward-office-title"><i class="fas fa-envelope"></i> </h3>
+
+					<div class="row">
+						<div class="col">
+							<p class="lead"><i class="fas fa-link"></i> Online</p>
+							<p id="ward-online"></p>
+						</div>
+
+						<div class="col">
+							<p class="lead"><i class="fas fa-store-alt"></i> Office</p>
+							<p id="ward-office"></p>
+							<p id="ward-phone"></p>
+						</div>
+					</div>
+				</div>
+  			</div>
+
+  			<div class="row transit-results d-none">
+				<div class="col">
+					<h2>Your Transit (CTA)</h2>
+				</div>
+				<div class="col">
+					<h2>Your Bikeshare (Divvy)</h2>
+				</div>
+			</div>
+
+  			<div class="row sanitation-results d-none">
+				<div class="col-sm-12">
+					<h2>Your Garbage/Recycling Pickup</h2>
+				</div>
+
+				<div class="col-sm-12">
+					<h2>Your Street Sweeping</h2>
+				</div>
+			</div>
+
+			<div class="row school-results d-none">
+				<div class="col">
+					<h2>Your Elementary/Middle Schools</h2>
+				</div>
+				<div class="col">
+					<h2>Your High Schools</h2>
+				</div>
+			</div>
   		</div>
   	</div>
 
   	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  	<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 
-  	<script type="text/javascript">
-  	var options = {
-	  enableHighAccuracy: true,
-	  timeout: 10000,
-	  maximumAge: 0
-	};
+  	<script src="js/app.js"></script>
 
-	function success(pos) {
-	  var crd = pos.coords;
-
-	  console.log('Your current position is:');
-	  console.log(`Latitude : ${crd.latitude}`);
-	  console.log(`Longitude: ${crd.longitude}`);
-	  //console.log(`More or less ${crd.accuracy} meters.`);
-
-	  $('.loc-unknown').addClass('d-none');
-	  getWard(crd); //Trigger ward lookup
-	};
-
-	function error(err) {
-	  $('.loc-disabled').removeClass('d-none');
-	  $('.loc-unknown').addClass('d-none');
-	  console.warn(`ERROR(${err.code}): ${err.message}`);
-	};
-
-	navigator.geolocation.getCurrentPosition(success, error, options);
-  	</script>
-
-
-  	<script type="text/javascript">
-  	var contacts = [
-  		{"ward":"1", "contact":"ward01@cityofchicago.org"},
-  		{"ward":"47", "alderman":"Ameya Pawar", "contact": {"email":"ward47@cityofchicago.org", "phone":"(773) 868-4747", "website": "http://chicago47.org"} }
-  	];
-
-  	function getWard(location){
-
-  		$.ajax({
-         url: "https://data.cityofchicago.org/resource/k9yb-bpqx.json",
-         method: "GET",
-  		 dataType: "json",
-		 data: {
-		   "$select": "*",
-		   "$where": "intersects(the_geom, 'POINT ("+location.longitude+" "+location.latitude+")')"
-		 }
-		 /*  //"$$app_token": app_token
-		 //,
-         //beforeSend: function(xhr){
-         	//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-         	//xhr.setRequestHeader('X-SODA2-Fields', '["ward"]');
-         //} */
-      }).done(function(data){
-      	console.log(data[0]);
-
-      	$('#ward-name').text('Ward '+data[0].ward);
-      	$('#ward-contact').text('');
-
-      	$('.loc-results').removeClass('d-none');
-      }).fail(function(error){
-      	console.log('Ward lookup failed: '+error[0]);
-
-      	$('#ward-name').text('Unknown');
-      	$('.loc-results').removeClass('d-none');
-      });
-  	}
-  	</script>
   </body>
 </html>
