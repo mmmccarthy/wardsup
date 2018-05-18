@@ -43,6 +43,11 @@
 			font-family: 'Raleway', 'Helvetica', 'Arial', sans-serif;
 			font-weight: 400;
 		}
+
+		/* Fix Funky Results */
+		.school-name::first-letter { text-transform: uppercase; }
+		.school-name { text-transform: lowercase; }
+
     </style>
   </head>
 
@@ -103,21 +108,24 @@
 			</div>
 
   			<div class="row sanitation-results d-none">
-				<div class="col-sm-12">
-					<h2>Your Garbage/Recycling Pickup</h2>
+				<div class="col">
+					<h3 class="text-info"><i class="fas fa-school"></i> Your Garbage/Recycling Pickup</h3>
+					<a href="https://www.recyclebycity.com/chicago/schedule" class="btn btn-outline-info" target="_blank">Get your Schedule</a>
 				</div>
 
-				<div class="col-sm-12">
-					<h2>Your Street Sweeping</h2>
+				<div class="col">
+					<h3 class="text-info"><i class="fas fa-school"></i> Your Street Sweeping Schedule</h3>
 				</div>
 			</div>
 
 			<div class="row school-results d-none">
-				<div class="col">
-					<h2>Your Elementary/Middle Schools</h2>
+				<div class="col-6">
+					<h3 class="text-info"><i class="fas fa-school"></i> Your Elementary Schools</h3>
+					<div class="row" id="elem-schools"></div>
 				</div>
-				<div class="col">
-					<h2>Your High Schools</h2>
+				<div class="col-6">
+					<h3 class="text-info"><i class="fas fa-building"></i> Your High Schools</h3>
+					<div class="row" id="high-schools"></div>
 				</div>
 			</div>
   		</div>
