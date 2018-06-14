@@ -7,7 +7,9 @@ var urls = {
 	highSchools: "https://data.cityofchicago.org/resource/juf9-y87b.json", 
 	sweepSections: "https://data.cityofchicago.org/resource/eiv4-4c3n.json", 
 	sweepSchedule: "https://data.cityofchicago.org/resource/dkvj-fe84.json",
-	cpsLink: "https://schoolinfo.cps.edu/schoolprofile/SchoolDetails.aspx?SchoolId="
+	cpsLink: "https://schoolinfo.cps.edu/schoolprofile/SchoolDetails.aspx?SchoolId=",
+	rodentRequests: "https://data.cityofchicago.org/resource/dvua-vftq.json",
+	graffitiRequests: "https://data.cityofchicago.org/resource/cdmx-wzbz.json"
 };
 
 
@@ -34,6 +36,8 @@ function getLocation(){
 	  getWard(geoloc);
 	  getSchools(geoloc);
 	  getSweepSection(geoloc);
+	  getRodentRequests(geoloc);
+	  getGraffitiRequests(geoloc);
 	};
 
 	function error(err) {
@@ -255,6 +259,87 @@ if(data != null){
 	}
 }
 
+function getRodentRequests(geoloc) {
+	console.log('Getting Rodent Requests...');
+	$.ajax({
+         url: urls.rodentRequests+appToken,
+         method: "GET",
+  		   dataType: "json",
+    		 data: {
+    		   "$select": "*",
+    		   "$where": "within_circle(location, "+geoloc.latitude+", "+geoloc.longitude+", 500)",
+    		   "$order": "creation_date DESC",
+    		   "$limit": 10
+    		 }
+      }).done(function(data){
+      	if(data != null){
+      		showRodentRequests(data);
+      	}else{
+      		console.log(`Rodent Requests error ${data}`);
+      	}
+      });
+}
+
+function showRodentRequests(data){
+if(data != null){
+		console.log(data);
+		$.each(data, function(i, item){
+			//data[i].datesplit = data[i].dates.split(',');
+			$('#rodent-requests').append(`
+				<tr>
+				<td>${data[i].creation_date}</td>
+				<td>${data[i].status}</td>
+				<td>${data[i].street_address}</td>
+				</tr>`);
+		});
+		//console.log(data);
+		$('.311-results,.rodent-results').removeClass('d-none');
+	}else{
+		console.log(data);
+		$('.rodent-results-help').removeClass('d-none').text("We did not find any rodent complaints near your location.");
+	}
+}
+
+function getGraffitiRequests(geoloc) {
+	console.log('Getting Rodent Requests...');
+	$.ajax({
+         url: urls.graffitiRequests+appToken,
+         method: "GET",
+  		   dataType: "json",
+    		 data: {
+    		   "$select": "*",
+    		   "$where": "within_circle(location, "+geoloc.latitude+", "+geoloc.longitude+", 500)",
+    		   "$order": "creation_date DESC",
+    		   "$limit": 10
+    		 }
+      }).done(function(data){
+      	if(data != null){
+      		showGraffitiRequests(data);
+      	}else{
+      		console.log(`Graffiti Requests error ${data}`);
+      	}
+      });
+}
+
+function showGraffitiRequests(data){
+if(data != null){
+		console.log(data);
+		$.each(data, function(i, item){
+			//data[i].datesplit = data[i].dates.split(',');
+			$('#graffiti-requests').append(`
+				<tr>
+				<td>${data[i].creation_date}</td>
+				<td>${data[i].status}</td>
+				<td>${data[i].street_address}</td>
+				</tr>`);
+		});
+		//console.log(data);
+		$('.311-results,.graffiti-results').removeClass('d-none');
+	}else{
+		console.log(data);
+		$('.graffiti-results-help').removeClass('d-none').text("We did not find any graffiti complaints near your location.");
+	}
+}
 
 
 window.onload = getLocation();

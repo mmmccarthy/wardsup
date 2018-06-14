@@ -112,14 +112,14 @@
 
   			<div class="row sanitation-results d-none top-buffer">
 				<div class="col">
-					<h3 class="text-info"><i class="fas fa-school"></i> Your Garbage/Recycling Pickup</h3>
+					<h3 class="text-info"><i class="fas fa-recycle"></i> Your Garbage/Recycling Pickup</h3>
 					<p class="lead help-text">Garbage (black cart) is collected once a week. Recycling (blue cart) is collected once every 2 weeks.</p>
 
 					<a href="https://www.recyclebycity.com/chicago/schedule" class="btn btn-outline-info" target="_blank">Get your Schedule</a>
 				</div>
 
 				<div class="col">
-					<h3 class="text-info"><i class="fas fa-school"></i> Your Street Sweeping Schedule</h3>
+					<h3 class="text-info"><i class="fas fa-broom"></i> Your Street Sweeping Schedule</h3>
 					<p class="lead help-text">Orange "No Parking" signs will be posted one day before scheduled sweeping and are removed after sweeping is completed.</p>
 
 					<div class="row" id="sweep-schedule"></div>
@@ -134,6 +134,51 @@
 				<div class="col-6">
 					<h3 class="text-info"><i class="fas fa-building"></i> Your High Schools</h3>
 					<div class="row" id="high-schools"></div>
+				</div>
+			</div>
+
+			<div class="row 311-results d-none top-buffer">
+				<div class="col-6">
+					<div class="card rodent-results d-none">
+						<div class="card-header">
+							<h3 class="text-info"><i class="fas fa-trash-alt"></i> Rodent Complaints &amp; Bait Requests</h3>
+						</div>
+						<div class="card-body">
+							<table id="rodent-requests-table" class="table">
+								<thead>
+								<tr>
+									<th>Creation Date</th>
+									<th>Status</th>
+									<th>Street Address</th>
+								</tr>
+								</thead>
+								<tbody id="rodent-requests">
+								</tbody>
+							</table>
+							<p id="rodent-results-help" class="help-block"></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="card graffiti-results d-none">
+						<div class="card-header">
+							<h3 class="text-info"><i class="fas fa-pencil"></i> Graffiti Removal Requests</h3>
+						</div>
+						<div class="card-body">
+							<table id="graffiti-requests-table" class="table">
+								<thead>
+								<tr>
+									<th>Creation Date</th>
+									<th>Status</th>
+									<th>Street Address</th>
+								</tr>
+								</thead>
+								<tbody id="graffiti-requests">
+								</tbody>
+							</table>
+							<p id="graffiti-results-help" class="help-block"></p>
+						</div>
+					</div>
 				</div>
 			</div>
   		</div>
