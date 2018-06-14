@@ -12,8 +12,40 @@ var urls = {
 	graffitiRequests: "https://data.cityofchicago.org/resource/cdmx-wzbz.json"
 };
 
+var geoloc = false;
+var queries = false;
 
-function getLocation(){
+function storageAvailable(){
+	
+	if (typeof(Storage) !== "undefined") {
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function getStoredLocation(){
+	var lat = window.sessionStorage.getItem("geolocationLat");
+	var longi = window.sessionStorage.getItem("geolocationLong");
+	
+	if(lat !== null && lat !== false && longi !== null && longi !== false){
+		var locobj = { latitude: lat, longitude: longi };
+		$('.loc-unknown').addClass('d-none');
+
+		geoloc = locobj;
+		return locobj;
+	}else{
+		return false;
+	}
+
+}
+
+function clearStoredLocation(){
+	window.sessionStorage.removeItem("geolocationLat");
+	window.sessionStorage.removeItem("geolocationLong");
+}
+
+function getLocation(callback){
 	console.log('Getting Location...');
 
 	var options = {
@@ -27,27 +59,48 @@ function getLocation(){
 	  //console.log(`More or less ${crd.accuracy} meters.`);
 
 	  $('.loc-unknown').addClass('d-none');
-	  var geoloc = crd;
+	  //var 
+	  geoloc = crd;
 
 	  console.log('Your current position is:');
 	  console.log(`Latitude : ${geoloc.latitude}`);
 	  console.log(`Longitude: ${geoloc.longitude}`);
 
-	  getWard(geoloc);
-	  getSchools(geoloc);
-	  getSweepSection(geoloc);
-	  getRodentRequests(geoloc);
-	  getGraffitiRequests(geoloc);
+	  // Save in browser
+	  //var geostring = JSON.stringify(geoloc);
+	  //console.log(geostring);
+	  window.sessionStorage.setItem("geolocationLat", geoloc.latitude);
+	  window.sessionStorage.setItem("geolocationLong", geoloc.longitude);
+	  window.sessionStorage.setItem("geolocationTime",Date.now());
+
+	  callback();
+	  //return geoloc;
+	  
 	};
 
 	function error(err) {
 	  $('.loc-disabled').removeClass('d-none');
 	  $('.loc-unknown').addClass('d-none');
 	  console.warn(`ERROR(${err.code}): ${err.message}`);
-	  var geoloc = false;
+	  return false;
 	};
 
 	navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+function runQueries(){
+	if(geoloc !== undefined && geoloc !== null){
+	getWard(geoloc);
+	getSchools(geoloc);
+	getSweepSection(geoloc);
+	getRodentRequests(geoloc);
+	getGraffitiRequests(geoloc);
+
+	queries = true;
+	}else{
+		queries = false;
+	}
+
 }
 
 function getWard(geoloc){
@@ -341,5 +394,43 @@ if(data != null){
 	}
 }
 
+function resetAll(){
+	/*$('#ward-num').html();
+	$('#ward-ald').html();
+	$('#ward-office-title').html();
+	$('#ward-office').html();
+	$('#ward-online').html();
+	$('#ward-phone').html();
+	$('#elem-schools').html();
+	$('#elem-schools').html();
+	$('#elem-schools').html();
+	$('#high-schools').html();
+	$('#sweep-schedule').html();
+	$('#rodent-requests').html();
+	$('#graffiti-requests').html(); */
 
-window.onload = getLocation();
+	clearStoredLocation();
+
+	location.reload();
+}
+
+window.onload = function (){
+var geoloc = false;
+var storedGeolocation = getStoredLocation();
+
+
+if(storedGeolocation !== null && storedGeolocation !== false){
+	geoloc = storedGeolocation;
+	$('.loc-memory').removeClass('d-none');
+	console.log(geoloc.latitude);
+	runQueries(geoloc);
+}else{
+	getLocation(runQueries);
+	//console.log(geoloc.latitude);
+}
+
+//if(geoloc !== null && geoloc !== false && geoloc !== undefined && queries == false){
+//	runQueries(geoloc);
+//}
+
+}
